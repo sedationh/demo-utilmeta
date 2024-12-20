@@ -8,6 +8,7 @@ import os
 from utilmeta.ops.config import Operations
 from utilmeta.conf.time import Time
 from utilmeta.core.orm.databases import DatabaseConnections, Database
+import utype
 
 import django
 
@@ -19,7 +20,11 @@ class RootAPI(api.API):
         return "world"
 
     @api.get
-    def bmi(self, weight: float, height: float):
+    def bmi(
+        self,
+        weight: float = utype.Param(gt=0, le=1000),
+        height: float = utype.Param(gt=0, le=4),
+    ):
         return round(weight / height**2, 1)
 
 
@@ -43,7 +48,7 @@ service.use(
     DatabaseConnections(
         {
             "default": Database(
-                name="demo-bmi",
+                name="db/demo-bmi",
                 engine="sqlite3",
             )
         }
@@ -54,7 +59,7 @@ service.use(
     Operations(
         route="ops",
         database=Database(
-            name="demo-bmi_utilmeta_ops",
+            name="db/demo-bmi_utilmeta_ops",
             engine="sqlite3",
         ),
     )
