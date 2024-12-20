@@ -13,6 +13,17 @@ import utype
 import django
 
 
+class BMISchema(utype.Schema):
+    value: float = utype.Field(round=2)
+
+    @property
+    def level(self) -> int:
+        for i, limit in enumerate([18.5, 25, 30]):
+            if self.value < limit:
+                return i
+        return 3
+
+
 @api.CORS(allow_origin="*")
 class RootAPI(api.API):
     @api.get
@@ -25,7 +36,7 @@ class RootAPI(api.API):
         weight: float = utype.Param(gt=0, le=1000),
         height: float = utype.Param(gt=0, le=4),
     ):
-        return round(weight / height**2, 1)
+        return BMISchema(value=weight / height**2)
 
 
 production = bool(os.getenv("UTILMETA_PRODUCTION"))
