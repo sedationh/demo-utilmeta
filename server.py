@@ -8,9 +8,12 @@ import os
 from utilmeta.ops.config import Operations
 from utilmeta.conf.time import Time
 from utilmeta.core.orm.databases import DatabaseConnections, Database
+from utilmeta.core.server.backends.django import DjangoSettings
 import utype
 
 import django
+
+from user.api import UserAPI
 
 
 class BMISchema(utype.Schema):
@@ -26,6 +29,8 @@ class BMISchema(utype.Schema):
 
 @api.CORS(allow_origin="*")
 class RootAPI(api.API):
+    user: UserAPI
+
     @api.get
     def hello(self):
         return "world"
@@ -52,8 +57,10 @@ service = UtilMeta(
     origin="https://demo-bmi.com" if production else None,
     route="/api",
     api=RootAPI,
+    auto_reload=True,
 )
 
+service.use(DjangoSettings(secret_key="YOUR_SECRET_KEY", apps=["user"]))
 
 service.use(
     DatabaseConnections(
