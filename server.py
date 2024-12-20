@@ -27,23 +27,6 @@ class BMISchema(utype.Schema):
         return 3
 
 
-@api.CORS(allow_origin="*")
-class RootAPI(api.API):
-    user: UserAPI
-
-    @api.get
-    def hello(self):
-        return "world"
-
-    @api.get
-    def bmi(
-        self,
-        weight: float = utype.Param(gt=0, le=1000),
-        height: float = utype.Param(gt=0, le=4),
-    ):
-        return BMISchema(value=weight / height**2)
-
-
 production = bool(os.getenv("UTILMETA_PRODUCTION"))
 service = UtilMeta(
     __name__,
@@ -56,7 +39,7 @@ service = UtilMeta(
     port=8000,
     origin="https://demo-bmi.com" if production else None,
     route="/api",
-    api=RootAPI,
+    api="api.RootAPI",
     auto_reload=True,
 )
 
