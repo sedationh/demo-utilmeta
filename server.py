@@ -48,6 +48,7 @@ service.use(
             name="db/demo-bmi_utilmeta_ops",
             engine="sqlite3",
         ),
+        secret_names=() if production else None,
     )
 )
 
