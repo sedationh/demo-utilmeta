@@ -3,28 +3,13 @@ This is a simple one-file project alternative when you setup UtilMeta project
 """
 
 from utilmeta import UtilMeta
-from utilmeta.core import api
 import os
 from utilmeta.ops.config import Operations
 from utilmeta.conf.time import Time
 from utilmeta.core.orm.databases import DatabaseConnections, Database
 from utilmeta.core.server.backends.django import DjangoSettings
-import utype
 
 import django
-
-from user.api import UserAPI
-
-
-class BMISchema(utype.Schema):
-    value: float = utype.Field(round=2)
-
-    @property
-    def level(self) -> int:
-        for i, limit in enumerate([18.5, 25, 30]):
-            if self.value < limit:
-                return i
-        return 3
 
 
 production = bool(os.getenv("UTILMETA_PRODUCTION"))

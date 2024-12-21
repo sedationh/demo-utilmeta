@@ -16,6 +16,7 @@ class UserSchema(orm.Schema[User]):
     signup_time: datetime
 
 
+@api.CORS(allow_origin="*")
 @auth.session_config.plugin
 class UserAPI(api.API):
     @api.post

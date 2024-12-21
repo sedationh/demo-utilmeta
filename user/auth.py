@@ -4,6 +4,13 @@ from .models import Session, User
 
 USER_ID = "_user_id"
 
+# 假设会话数据存储在数据库或 Cookie 中，格式如下：
+# session_data = {
+#     "_user_id": 123,  # 用户 ID
+#     "session_id": "abc123",  # 会话 ID
+#     "data": "some_session_data",  # 其他会话数据
+# }
+
 
 class SessionSchema(DBSessionSchema):
     def get_session_data(self):
